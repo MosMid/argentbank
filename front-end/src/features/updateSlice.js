@@ -1,9 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
-/**
- * Update user profile fetch query
- * @returns {Object.<string, number>} fetch response
- */
 export const updateUser = createAsyncThunk('signInUser', async(body) => {
     const update = await fetch ("http://localhost:3001/api/v1/user/profile", {
         method: "PUT",

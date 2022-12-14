@@ -145,6 +145,11 @@ html {
   .loggedInHeader .main-nav-item{
     margin-left: 20px;
   }
+
+  .profile{
+    height: auto;
+    padding-bottom: 20px;
+  }
   
   @media (min-width: 920px) {
     .hero {

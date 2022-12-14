@@ -1,5 +1,5 @@
 import { Navigate } from "react-router-dom";
-import { useRef, useState, useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { userProfile } from '../../features/userSlice';
 import { signInUser } from '../../features/authSlice';
@@ -8,6 +8,7 @@ function Signin(){
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const  auth  = useSelector((state) => state.auth)
+    const checkbox = useRef()
     const dispatch = useDispatch();
 
     /**
@@ -18,7 +19,7 @@ function Signin(){
     async function signinForm(e){
         e.preventDefault()
         //check if "remember me" checkbox is checked
-        if(document.getElementById('remember-me').checked){
+        if(checkbox.current.checked){
             dispatch({
                 type: "auth/remember",
                 payload: true
@@ -30,12 +31,13 @@ function Signin(){
             })
         }
         dispatch(signInUser({email: email, password: password}))
-        //Wait for token before dispatching user fetch query
-        var intrval = setInterval(function(){
-            if(localStorage.getItem('status') === '200') dispatch(userProfile());
-            if (localStorage.getItem('token') || localStorage.getItem('status') === '400' || localStorage.getItem('status') === '404') clearInterval(intrval);
-        }, 1000)
     }
+    
+    //Wait for token before dispatching user fetch query
+    useEffect(()=>{
+        if(localStorage.getItem('status') === '200') dispatch(userProfile());
+    },[localStorage.getItem('token')])
+
     return <div>
         <main className="main bg-dark">
             <section className="sign-in-content">
@@ -51,7 +53,7 @@ function Signin(){
                         <input type="password" id="password" value={password} onChange={(e) => setPassword(e.target.value)}/>
                     </div>
                     <div className="input-remember">
-                        <input type="checkbox" id="remember-me"/><label htmlFor="remember-me">Remember me</label>
+                        <input type="checkbox" id="remember-me" ref={checkbox}/><label htmlFor="remember-me">Remember me</label>
                     </div>
                     {auth.status === 400 && <p>Incorrect email or password</p>}
                     {auth.status === 404 && <p>Server error</p>}

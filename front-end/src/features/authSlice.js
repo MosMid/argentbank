@@ -54,7 +54,6 @@ const authSlice = createSlice({
                     //console.log("Invalid id or password");
                     state.status = action.payload.status
                     localStorage.setItem("status", action.payload.status)
-                    console.log("im hear")
                     break;
                 default:
                     console.log("uknown error")

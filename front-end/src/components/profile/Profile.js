@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux"
 import { updateUser } from "../../features/updateSlice"
 import { Navigate } from 'react-router-dom'
 
-function Profile(){   
+function Profile(){
+    const token = localStorage.getItem('token')
     const [firstName, setFirstName] = useState("")
     const [lastName, setLastName] = useState("")
     const [edit, setEdit] = useState(false)
@@ -55,12 +56,13 @@ function Profile(){
                 type: "user/update",
                 payload: {firstName: updatedFirstName.current, lastName: updatedLastName.current}
             })
+            localStorage.setItem('token', token)
         }, 100)
     }
 
     return <div>
         {localStorage.getItem('token') &&
-        <main className="main bg-dark">
+        <main className="main bg-dark profile">
             {!edit && <div className="header">
                 <h1>Welcome back<br /><span id="name">{user.firstName} {user.lastName}</span></h1>
                 <button className="edit-button" onClick={() => handleEdit()}>Edit Name</button>
