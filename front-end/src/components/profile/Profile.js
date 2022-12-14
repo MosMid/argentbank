@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useEffect, useRef, useState } from "react"
 import { useDispatch, useSelector } from "react-redux"
 import { updateUser } from "../../features/updateSlice"
 import { Navigate } from 'react-router-dom'
@@ -27,7 +27,7 @@ function Profile(){
             })
             window.location.reload()
         }
-    }, 10000);
+    }, 60000);
     
     /**
      * Trigger display of edit user profile element
@@ -48,17 +48,21 @@ function Profile(){
      * @listens event
      */
     function updateForm(e){
-        e.preventDefault()
+        //e.preventDefault()
         dispatch(updateUser({firstName: firstName, lastName: lastName}))
         setEdit(false)
         setTimeout(function(){
-            dispatch({
-                type: "user/update",
-                payload: {firstName: updatedFirstName.current, lastName: updatedLastName.current}
-            })
             localStorage.setItem('token', token)
-        }, 100)
+        }, 1000)
     }
+
+    useEffect(()=>{
+        dispatch({
+            type: "user/update",
+            payload: {firstName: updatedFirstName.current, lastName: updatedLastName.current}
+        })
+            localStorage.setItem('token', token)
+    },[update])
 
     return <div>
         {localStorage.getItem('token') &&
