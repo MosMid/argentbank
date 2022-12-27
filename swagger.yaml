@@ -111,7 +111,7 @@ paths:
         '500':
           description: Internal Server Error
   /user/transaction:
-    post:
+    get:
         security:
           - Bearer: []
         tags:
@@ -134,6 +134,64 @@ paths:
             description: Invalid Fields
           '500':
             description: Internal Server Error
+    put:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Add Tx API
+      description: API for adding transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Add transactions
+          required: true
+          schema:
+            $ref: '#/definitions/AddTx'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction added successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
+    delete:
+      security:
+        - Bearer: []
+      tags:
+        - User Module
+      summary: User Delete Tx API
+      description: API for deleting transactions
+      parameters:
+        - in: header
+          name: Authorization
+          description: Attach Bearer JWT token
+          required: true
+        - in: body
+          name: body
+          description: Delete transactions
+          required: true
+          schema:
+            $ref: '#/definitions/DeleteTx'
+      produces:
+        - application/json
+      responses:
+        '200':
+          description: Transaction deleted successully
+          schema:
+            $ref: '#/definitions/ApiResponse'
+        '400':
+          description: Invalid Fields
+        '500':
+          description: Internal Server Error
 securityDefinitions:
   Bearer:
     type: apiKey
@@ -200,6 +258,8 @@ definitions:
         items:
           type: object
           properties:
+            id:
+              type: string
             date:
               type: string
             description:
@@ -208,3 +268,21 @@ definitions:
               type: number
             balance:
               type: number
+  AddTx:
+    type: object
+    properties:
+      id:
+        type: string
+      date:
+        type: string
+      description:
+        type: string
+      amount:
+        type: number
+      balance:
+        type: number
+  DeleteTx:
+    type: object
+    properties:
+      id:
+        type: string
